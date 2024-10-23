@@ -7,15 +7,9 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.camera.view.CameraController
 import androidx.camera.view.LifecycleCameraController
 import androidx.camera.view.PreviewView
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowForward
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -25,22 +19,18 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-//import androidx.compose.ui.platform.LocalLifecycleOwner Deprecated
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.binarystack01.pic.presentation.ui.components.actionbutton.CaptureButton
-import com.binarystack01.pic.presentation.ui.navigation.AppScreens
 import com.binarystack01.pic.presentation.viewmodels.PermissionsViewModel
 
 
 @Composable
 fun Camera(
-    navController: NavHostController,
     permissionsViewModel: PermissionsViewModel = viewModel(),
 ) {
 
@@ -107,22 +97,6 @@ fun Camera(
                 },
                 modifier = Modifier.fillMaxSize()
             )
-            Box(
-                modifier = Modifier.matchParentSize(),
-                contentAlignment = Alignment.TopEnd
-            ) {
-                IconButton(
-                    modifier = Modifier
-                        .padding(top = 10.dp, end = 10.dp)
-                        .background(color = Color(0x61000000), shape = CircleShape),
-                    onClick = { navController.navigate(route = AppScreens.Gallery.name) }) {
-                    Icon(
-                        imageVector = Icons.Filled.ArrowForward,
-                        tint = Color.White,
-                        contentDescription = null
-                    )
-                }
-            }
             Box(
                 modifier = Modifier
                     .padding(bottom = 20.dp)

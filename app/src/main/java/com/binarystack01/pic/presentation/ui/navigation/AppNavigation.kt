@@ -2,9 +2,9 @@ package com.binarystack01.pic.presentation.ui.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
 import com.binarystack01.pic.presentation.ui.screens.camera.Camera
 import com.binarystack01.pic.presentation.ui.screens.gallery.PicGallery
 
@@ -12,9 +12,8 @@ import com.binarystack01.pic.presentation.ui.screens.gallery.PicGallery
 @Composable
 fun AppNavigation(
     modifier: Modifier = Modifier,
+    navController: NavHostController,
 ) {
-
-    val navController = rememberNavController()
 
     NavHost(
         modifier = modifier,
@@ -23,7 +22,7 @@ fun AppNavigation(
     ) {
 
         composable(route = AppScreens.Camera.name) {
-            Camera(navController = navController)
+            Camera()
         }
 
         composable(route = AppScreens.Gallery.name) {
