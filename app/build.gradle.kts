@@ -51,7 +51,6 @@ android {
 
 dependencies {
 
-
     // ViewModel
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
     // ViewModel utilities for Compose
@@ -62,6 +61,9 @@ dependencies {
     implementation(libs.androidx.camera.camera2)
     // Additionally use the CameraX Lifecycle library
     implementation(libs.androidx.camera.lifecycle)
+    implementation(libs.androidx.camera.view.v150alpha02)
+
+    implementation(libs.androidx.camera.extensions)
 
 
     // Jetpack Compose integration
