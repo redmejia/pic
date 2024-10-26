@@ -23,17 +23,15 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.compose.ui.viewinterop.AndroidView
-import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavHostController
 import com.binarystack01.pic.presentation.ui.components.actionbutton.CaptureButton
+import com.binarystack01.pic.presentation.viewmodels.CaptureViewModel
 import com.binarystack01.pic.presentation.viewmodels.PermissionsViewModel
-
 
 @Composable
 fun Camera(
-    permissionsViewModel: PermissionsViewModel = viewModel(),
+    captureViewModel: CaptureViewModel,
+    permissionsViewModel: PermissionsViewModel,
 ) {
-
 
     val cameraPermissionResultLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.RequestPermission(),
@@ -55,7 +53,6 @@ fun Camera(
 
     val permissionState by permissionsViewModel.permissionState.collectAsState()
 
-
     LaunchedEffect(permissionState) {
         Log.d("PERMISSION-STATE", "Camera: $permissionState")
         if (!permissionState) {
@@ -72,10 +69,12 @@ fun Camera(
 
     DisposableEffect(permissionState) {
         if (permissionState) {
+            Log.d("CAMERA", "Setting up camera use cases")
             cameraController.setEnabledUseCases(CameraController.IMAGE_CAPTURE)
             cameraController.bindToLifecycle(lifecycleOwner)
         }
         onDispose {
+            Log.d("CAMERA", "Unbinding camera")
             cameraController.unbind()
         }
     }
@@ -105,8 +104,11 @@ fun Camera(
             ) {
                 CaptureButton(
                     onClick = {
-                        Log.d("CLICK", "onCreate: clicked")
                         clicked.value = !clicked.value
+                        captureViewModel.capturePicture(
+                            context = context,
+                            controller = cameraController
+                        )
                     },
                     clicked = clicked
                 )

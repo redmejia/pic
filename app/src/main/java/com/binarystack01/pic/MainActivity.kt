@@ -12,12 +12,14 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.rememberNavController
 import com.binarystack01.pic.presentation.ui.navigation.AppNavigation
 import com.binarystack01.pic.presentation.ui.navigation.BottomBar
+import com.binarystack01.pic.presentation.viewmodels.CaptureViewModel
 import com.binarystack01.pic.presentation.viewmodels.PermissionsViewModel
 import com.binarystack01.pic.ui.theme.PicTheme
 
 class MainActivity : ComponentActivity() {
 
     private lateinit var permissionsViewModel: PermissionsViewModel
+    private lateinit var captureViewModel: CaptureViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,8 +29,10 @@ class MainActivity : ComponentActivity() {
             PicTheme {
 
                 permissionsViewModel = viewModel<PermissionsViewModel>()
+                captureViewModel = viewModel<CaptureViewModel>()
 
                 val navController = rememberNavController()
+
                 Scaffold(
                     modifier = Modifier.fillMaxSize(),
                     bottomBar = {
@@ -37,6 +41,8 @@ class MainActivity : ComponentActivity() {
                 ) { innerPadding ->
                     AppNavigation(
                         navController = navController,
+                        captureViewModel = captureViewModel,
+                        permissionsViewModel = permissionsViewModel,
                         modifier = Modifier.padding(innerPadding)
                     )
                 }
