@@ -7,6 +7,13 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.camera.view.CameraController
 import androidx.camera.view.LifecycleCameraController
 import androidx.camera.view.PreviewView
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.EaseIn
+import androidx.compose.animation.core.EaseInOut
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -19,6 +26,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.LocalLifecycleOwner
@@ -26,6 +34,7 @@ import androidx.compose.ui.viewinterop.AndroidView
 import com.binarystack01.pic.presentation.ui.components.actionbutton.CaptureButton
 import com.binarystack01.pic.presentation.viewmodels.CaptureViewModel
 import com.binarystack01.pic.presentation.viewmodels.PermissionsViewModel
+import kotlinx.coroutines.delay
 
 @Composable
 fun Camera(
@@ -84,8 +93,21 @@ fun Camera(
         mutableStateOf(false)
     }
 
+    val visibleBlink = remember {
+        mutableStateOf(false)
+    }
+
+    LaunchedEffect(visibleBlink.value) {
+        if (visibleBlink.value) {
+            delay(200)
+            visibleBlink.value = false
+        }
+    }
+
+
     Box(modifier = Modifier.fillMaxSize()) {
         if (permissionState) {
+
             AndroidView(
                 factory = { ctx ->
                     PreviewView(ctx).apply {
@@ -96,6 +118,7 @@ fun Camera(
                 },
                 modifier = Modifier.fillMaxSize()
             )
+            BlinkAnimation(visible = visibleBlink.value)
             Box(
                 modifier = Modifier
                     .padding(bottom = 20.dp)
@@ -105,6 +128,8 @@ fun Camera(
                 CaptureButton(
                     onClick = {
                         clicked.value = !clicked.value
+                        visibleBlink.value = true
+
                         captureViewModel.capturePicture(
                             context = context,
                             controller = cameraController
@@ -114,5 +139,28 @@ fun Camera(
                 )
             }
         }
+    }
+}
+
+@Composable
+fun BlinkAnimation(
+    visible: Boolean,
+) {
+    AnimatedVisibility(
+        visible = visible,
+        enter = fadeIn(
+            initialAlpha = 0.0f,
+            animationSpec = tween(durationMillis = 300, easing = EaseIn)
+        ),
+        exit = fadeOut(
+            targetAlpha = 0.0f,
+            animationSpec = tween(durationMillis = 500, easing = EaseInOut)
+        )
+    ) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(color = Color(0x61000000))
+        )
     }
 }
